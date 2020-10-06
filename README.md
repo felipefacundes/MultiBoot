@@ -2,15 +2,22 @@
 </br>
 </br>
 ###### Iremos usar tanto o sistema UEFI para BOOT como MBR (para sistemas mais antigos).
+
 ###### Primeiro formate o pendrive com uma partição pequena de `40M` como `FAT32`, para usar como `EFI`. A tabela de partição não precisa ser em GPT, pelo contrári, é recomendado que seja tabela `DOS`, pois a tabela GPT tem limitações, a primeira é a escrita em `MBR`, o GRUB não escreve em MBR se a tabela for GPT. A segunda limitação é que esta tabela somente aceita partições de até 2T, limitação que não existe com a tabela `DOS`.
+
 ##### Instale algumas Ferramentas no seu sistema, antes de gerir o pendrive:
 `sudo pacman -S arch-install-scripts exfatprogs mtools dosfstools libisoburn`
+
 ##### Detectando qual unidade é o pendrive:
 `sudo fdisk -l`
+
 ##### Criando a tabela de partição no pendrive:
 `sudo cfdisk -z /dev/sdX` # Onde X é a letra que corresponde ao seu pendrive.
+
 ###### Ao escolher a tabela DOS crie a primeira partição de `40M` a segunda com o tamanho inteiro, e se quiser ter o Instalador do Windows no pendrive basta criar uma terceira partição como `FAT32`, porém está partição tem que ser no tamanho exato da imagem ISO, exemplo, para uma imagem do Windows 8.1, essa partição precisará ter 4,5G.
+
 ###### Não crie mais que três partições, pois a partir da 4ª partição o pendrive ficará lento. Então, só crie 3 partições. A primeira use como FAT32 /EFI. A segunda, será a maior partição como `EXT4` e a terceira para Windows Installer como `FAT32`.
+
 ##### Supondo que o seu pendrive seja a segunda unidade de disco com a letra `B`, lembrando, antes detecte a unidade com `sudo fdisk -l`. Então, formate assim:
 ```
 sudo mkfs.vfat -F32 -n EFI /dev/sdb1
