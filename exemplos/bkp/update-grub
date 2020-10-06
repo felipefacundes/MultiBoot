@@ -1,0 +1,14 @@
+#!/bin/bash
+grub-install --target=i386-pc --recheck /dev/sdb
+grub-install --verbose --recheck --force --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=MULTIBOOT --removable
+grub-install --verbose --recheck --force --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=MULTIBOOT 
+grub-mkconfig -o /boot/grub/grub.cfg
+echo ------------------------------------
+echo grub-install --target=i386-pc --recheck /dev/sdb
+#echo grub-install --verbose --recheck --force --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=MULTIBOOT
+echo grub-install --verbose --recheck --force --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=MULTIBOOT --removable
+echo grub-mkconfig -o /boot/grub/grub.cfg
+echo ------------------------------------
+echo Sincronizando dados...
+sync
+echo Dados sincronizados com sucesso.
