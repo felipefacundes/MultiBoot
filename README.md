@@ -1,6 +1,7 @@
 ##### Criando um Pendrive Multiboot no ArchLinux, com Ferramentas administrativas, diversas distrinuições Linux e com Windows.
 </br>
 </br>
+
 ###### Iremos usar tanto o sistema UEFI para BOOT como MBR (para sistemas mais antigos).
 
 ###### Primeiro formate o pendrive com uma partição pequena de `40M` como `FAT32`, para usar como `EFI`. A tabela de partição não precisa ser em GPT, pelo contrári, é recomendado que seja tabela `DOS`, pois a tabela GPT tem limitações, a primeira é a escrita em `MBR`, o GRUB não escreve em MBR se a tabela for GPT. A segunda limitação é que esta tabela somente aceita partições de até 2T, limitação que não existe com a tabela `DOS`.
@@ -108,8 +109,8 @@ sudo umount -R /mnt
 ##### Pendrive pronto, basta reiniciar o sistema e dar boot pelo pendrive. Não esqueça de ler esse artigo com cautela para fazer tudo certinho ;)
 
 ###### Segue alguns exemplos de `40_custom`:
-[Exemplo 1](https://raw.githubusercontent.com/felipefacundes/MultiBoot/main/40_custom)
-###### .
-[Exemplo 2](https://raw.githubusercontent.com/felipefacundes/MultiBoot/main/exemplos/40_custom.exemplo.2)
-###### .
-[Exemplo 3](https://raw.githubusercontent.com/felipefacundes/MultiBoot/main/exemplos/40_custom.exemplo.3.diversos)
+[Exemplo 1](https://github.com/felipefacundes/MultiBoot/blob/main/40_custom)
+
+[Exemplo 2](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.2)
+
+[Exemplo 3](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.3.diversos)
