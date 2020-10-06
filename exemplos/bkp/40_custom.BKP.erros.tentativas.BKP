@@ -1,0 +1,353 @@
+#!/bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+
+# Exemplo 1
+#
+#menuentry 'archlabs-2020.05.04.iso' {
+#	set isofile='/ISOs/archlabs-2020.05.04.iso'
+#	loopback loop $isofile
+#	linux (loop)/arch/boot/x86_64/vmlinuz iso_loop_dev=$imgdevpath iso_loop_path=$isofile earlymodules=loop
+#	initrd (loop)/arch/boot/x86_64/archiso.img
+#}
+
+#insmod part_msdos
+#insmod f2fs
+#insmod search_fs_uuid
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set live=Live
+set debug_mode="Live DEBUG mode"
+source /efi/boot/android.cfg root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+
+menuentry "Memtest 86+" {
+#insmod part_msdos
+#insmod f2fs
+#insmod search_fs_uuid
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+linux16 /boot/memtest86+/memtest.bin root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+}
+
+menuentry "archlabs-2020.05.04.iso" --class dvd {
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90 isofile="/ISOs/archlabs-2020.05.04.iso"
+set dri="free"
+search --no-floppy -f --set=root ($root)$isofile
+probe -u $root --set=abc
+set pqr="/dev/disk/by-uuid/$abc"
+loopback loop ($root)$isofile
+linux (loop)/arch/boot/x86_64/vmlinuz img_dev=$pqr img_loop=$isofile driver=$dri
+initrd (loop)/arch/boot/x86_64/archiso.img
+}
+
+menuentry "PrimeOS_mainline_0.4.5.iso" --class android  {
+insmod part_msdos
+insmod f2fs
+insmod search_fs_uuid
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90 isofile="/ISOs/primeos_mainline_0.4.5.iso"
+set src=iso-scan/filename=$isofile
+loopback loop ($root)$isofile
+set dri="free"
+export android bootefi grub kdir live src
+#search --file --no-floppy --set=root ($root)$isofile
+#probe -u $root --set=abc
+#set pqr="/dev/disk/by-uuid/$abc"
+#linux (loop)/arch/boot/x86_64/vmlinuz img_dev=$pqr img_loop=$isofile driver=$dri
+linux (loop)/kernel root=/dev/ram0 root=/dev/ram0 androidboot.selinux=permissive buildvariant=userdebug $src $@
+#androidboot.hardware=android_x86_64 androidboot.selinux=permissive quiet img_loop=$isofile driver=$dri VGA=788
+initrd (loop)/install.img
+initrd (loop)/initrd.img
+#linux /PhoenixOS-ROC/kernel root=/dev/ram0 androidboot.hardware=android_x86_64 androidboot.selinux=permissive quiet SRC=/PhoenixOS-ROC DATA=/data VGA=788
+#initrd /PhoenixOS-ROC/initrd.img
+}
+
+menuentry "PrimeOS_mainline_0.4.5.iso 2" --class dvd  {
+insmod part_msdos
+insmod f2fs
+insmod search_fs_uuid
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/primeos_mainline_0.4.5.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+set src=iso-scan/filename=$isofile
+loopback loop ($root)$isofile
+set dri="free"
+probe -u $root --set=abc
+set pqr="/dev/disk/by-uuid/$abc"
+linux (loop)/kernel root=/dev/ram0 androidboot.selinux=permissive quiet buildvariant=userdebug img_dev=$pqr img_loop=$isofile driver=$dri VGA=788 $src $@
+initrd (loop)/install.img
+}
+
+menuentry "Windows Part" --class windows --class os {
+insmod part_gpt
+insmod part_msdos
+insmod chain
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+set root=UUID=BC13-1422
+search --no-floppy --fs-uuid --set=root BC13-1422
+chainloader +1
+chainloader /efi/microsoft/boot/cdboot.efi root=UUID=BC13-1422
+}
+
+menuentry "Windows Partic" --class windows --class os {
+#insmod part_gpt
+insmod part_msdos
+insmod chain
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+set root=UUID=BC13-1422
+search --no-floppy --fs-uuid --set=root BC13-1422
+#chainloader +1
+chainloader /efi/boot/bootx64.efi root=UUID=BC13-1422
+}
+
+menuentry "Windows Part 2" --class windows --class os {
+#insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod chain
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+set root=UUID=BC13-1422
+search --no-floppy --fs-uuid --set=root BC13-1422
+chainloader +1
+chainloader /efi/microsoft/boot/cdboot.efi root=UUID=BC13-1422
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:/bootmgr root=UUID=BC13-1422 \
+newc:bcd:/boot/bcd root=UUID=BC13-1422 \
+newc:boot.sdi:/boot/boot.sdi root=UUID=BC13-1422 \
+newc:boot.wim:/sources/boot.wim root=UUID=BC13-1422 \
+newc:bootx64.efi:/efi/boot/bootx64.efi root=UUID=BC13-1422
+#newc:install.wim:/sources/install.wim root=UUID=BC13-1422
+}
+
+# Exemplo 2 - Para Windows installer
+
+menuentry "Rwin" --class dvd {
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+chainloader (loop)/efi/boot/bootx64.efi
+}
+
+menuentry "Win8.1_BrazilianPortuguese_x64.iso" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+#insmod iso9660
+#insmod ntldr
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+chainloader (loop)/efi/microsoft/boot/cdboot.efi
+chainloader (loop)/efi/boot/bootx64.efi
+}
+
+menuentry "Win8.1 ISO 1" {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod iso9660
+insmod search_fs_uuid
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso
+#set isofile=/ISOs/Win8.1_BrazilianPortuguese_x64.iso
+#search --no-floppy -f --set=root $isofile
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim \
+newc:bootx64.efi:(loop)/efi/boot/bootx64.efi
+#newc:install.wim:(loop)/sources/install.wim
+#chainloader (loop)/efi/microsoft/boot/cdboot.efi
+}
+
+menuentry "Win8.1 ISO 2" {
+insmod part_msdos
+insmod part_gpt
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+#insmod iso9660
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+#search --no-floppy -f --set=root $isofile
+#set root=(hd0,gpt3)
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim \
+newc:install.wim:(loop)/sources/install.wim
+#chainloader (loop)/efi/microsoft/boot/cdboot.efi
+}
+
+menuentry "Win8.1 ISO 3" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod chain
+insmod search_fs_uuid
+#insmod iso9660
+#set root=(hd0,gpt3)
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim \
+newc:install.wim:(loop)/sources/install.wim
+chainloader (loop)/efi/microsoft/boot/cdboot.efi
+}
+
+menuentry "Win8.1 ISO 4" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod chain
+insmod search_fs_uuid
+#insmod iso9660
+#set root=(hd0,gpt3)
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bootx64.efi:(loop)/efi/boot/bootx64.efi \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim
+}
+
+menuentry "Win8.1 ISO 5" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod chain
+insmod search_fs_uuid
+#insmod iso9660
+#set root=(hd0,gpt3)
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootx64.efi:(loop)/efi/boot/bootx64.efi \
+newc:bcd:(loop)/efi/microsoft/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim
+}
+
+menuentry "Win8.1 ISO 6" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod chain
+insmod search_fs_uuid
+#insmod iso9660
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+#set root=(hd0,gpt3)
+#loopback loop /ISOs/Win8.1_BrazilianPortuguese_x64.iso
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim
+chainloader (loop)/efi/microsoft/boot/cdboot.efi
+}
+
+# Exemplo 2 - Para Windows installer
+menuentry "Win8.1 ISO 7" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod chain
+insmod search_fs_uuid
+#insmod iso9660
+#insmod ntldr
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+chainloader (loop)/efi/microsoft/boot/cdboot.efi
+linux16 /usr/share/wimboot/wimboot root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+initrd16 \
+newc:bootmgr:(loop)/bootmgr \
+newc:bcd:(loop)/boot/bcd \
+newc:boot.sdi:(loop)/boot/boot.sdi \
+newc:boot.wim:(loop)/sources/boot.wim \
+newc:install.wim:(loop)/sources/install.wim
+}
+
+menuentry "Windows 8.1 Installer" --class dvd {
+insmod part_gpt
+insmod part_msdos
+insmod f2fs
+insmod ntfs
+insmod exfat
+insmod fat
+insmod search_fs_uuid
+set root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+search --no-floppy --fs-uuid --set=root e1922b06-a76e-4950-9b4a-105aa5f3de90
+set isofile="/ISOs/Win8.1_BrazilianPortuguese_x64.iso" root=UUID=e1922b06-a76e-4950-9b4a-105aa5f3de90
+loopback loop ($root)$isofile
+#search --set=root --file (loop)/bootmgr
+ntldr (loop)/bootmgr
+}
