@@ -1,0 +1,16 @@
+        menuentry "FreeBSD-12.1-RELEASE-amd64-disc1.iso" --class dvd {
+            insmod part_gpt
+            insmod part_msdos
+            insmod iso9660
+            insmod ufs2
+            insmod zfs
+            insmod search_fs_uuid
+            set root=UUID=874d4be9-50fa-4a25-bec9-e0c5b61126de
+            set isofile="/ISOs/FreeBSD-12.1-RELEASE-amd64-disc1.iso" root=UUID=874d4be9-50fa-4a25-bec9-e0c5b61126de
+            search --no-floppy -f --set=root $isofile
+            loopback loop $isofile
+            freebsd  (loop)/boot/kernel/kernel
+            freebsd_loadenv  (loop)/boot/device.hints
+            set FreeBSD.vfs.root.mountfrom=cd9660:/dev/ad1s1
+            set FreeBSD.vfs.root.mountfrom.options=rw
+        }
