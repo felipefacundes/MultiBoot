@@ -175,8 +175,10 @@ sudo umount -R /mnt
 ----
 
 ###### Segue alguns exemplos de `40_custom`:
-[Exemplo 1](https://github.com/felipefacundes/MultiBoot/blob/main/40_custom)
+[Exemplo 1](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom_2022)
 
-[Exemplo 2](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.2)
+[Exemplo 2](https://github.com/felipefacundes/MultiBoot/blob/main/40_custom)
 
-[Exemplo 3](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.3.diversos)
+[Exemplo 3](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.2)
+
+[Exemplo 4](https://github.com/felipefacundes/MultiBoot/blob/main/exemplos/40_custom.exemplo.3.diversos)
