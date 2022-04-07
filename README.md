@@ -91,7 +91,21 @@ sudo umount -R ~/WIN && rm -rf ~/WIN
 ##### Exemplo de `40_custom` com o Instalador do Windows na partição do pendrive e ArchLinux ISO, lembrando que você poderá ter qualquer distribuição Linux no pendrive, mas para cada distribuição Linux os parâmetros da ISO são diferentes:
 
 ###### Antes de tudo verifique o UUID de cada partição do pendrive com o comando: `sudo blkid` e substitua onde está `1234-5678` pelo UUID correspondente da partição onde estão às ISOs e a partição do Windows Installer.
-```
+```markdown
+menuentry "Recovery: ArchLinux-2022.03.iso" --hotkey=0 --class dvd {
+      	insmod part_gpt
+      	insmod search_fs_uuid
+      	set root=UUID=d3c602bf-4a10-4948-b4c4-13f7d3fa0bc2
+      	set isofile="/archlinux-2022.03.01-x86_64.iso"
+      	set dri="free"
+      	search --no-floppy -f --set=root $isofile
+      	probe -u $root --set=abc
+      	set pqr="/dev/disk/by-uuid/$abc"
+      	loopback loop $isofile
+      	linux (loop)/arch/boot/x86_64/vmlinuz-linux img_dev=$pqr img_loop=$isofile driver=$dri
+      	initrd (loop)/arch/boot/intel-ucode.img (loop)/arch/boot/amd-ucode.img (loop)/arch/boot/x86_64/initramfs-linux.img
+}
+
 menuentry "ArchLinux-2020.iso" --class dvd {
       insmod part_msdos
       insmod search_fs_uuid
@@ -115,6 +129,24 @@ menuentry "Windows 10 Installer Partition" --class windows --class os {
         set root=UUID=1234-5678
         search --no-floppy --fs-uuid --set=root 1234-5678
         chainloader /efi/boot/bootx64.efi root=UUID=1234-5678
+}
+
+menuentry "Android (Phoenix-OS)" --hotkey=a --class android-x86 {
+	insmod part_gpt
+	insmod search_fs_uuid
+	set root=UUID=5cbd2559-e23e-4696-9645-08580d8e3fb7
+	search --file --no-floppy --set=root /PhoenixOS/system.img
+        linux /PhoenixOS/kernel root=/dev/ram0 androidboot.hardware=android_x86_64 androidboot.selinux=permissive quiet SRC=/PhoenixOS Data=/data vga=788
+	initrd /PhoenixOS/initrd.img
+}
+
+menuentry "Android (BlissOS-v11.13)" --hotkey=1 --class android-x86 {
+	insmod part_gpt
+	insmod search_fs_uuid
+	set root=UUID=5cbd2559-e23e-4696-9645-08580d8e3fb7
+	search --file --no-floppy --set=root /BlissOS-v11.13/system.img
+        linux /BlissOS-v11.13/kernel root=/dev/ram0 androidboot.hardware=android_x86_64 androidboot.selinux=permissive quiet SRC=/BlissOS-v11.13 Data=/data vga=788
+	initrd /BlissOS-v11.13/initrd.img
 }
 ```
 
