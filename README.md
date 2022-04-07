@@ -56,7 +56,7 @@ sudo chown -R "$USER":users /mnt/
 ----
 
 ##### Instale o básico no pendrive, NÂO instale o kernel
-`sudo pacstrap -i /mnt efibootmgr exfatprogs grub pacman dosfstools libisoburn os-prober mtools fuse2 freetype2 ntfs-3g sed f2fs-tools parted fatresize tar psmisc pciutils usbutils libusb-compat memtest86`
+`sudo pacstrap -i /mnt coreutils efibootmgr exfatprogs grub dosfstools libisoburn mtools sed`
 
 ----
 
