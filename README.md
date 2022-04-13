@@ -35,21 +35,21 @@
 
 ##### Supondo que o seu pendrive seja a segunda unidade de disco com a letra `B`, lembrando, antes detecte a unidade com `sudo fdisk -l`. Então, formate assim:
 ```
-sudo mkfs.vfat -F32 -n EFI /dev/sdb1
-sudo mkfs.ext4 /dev/sdb2
-sudo mkfs.vfat -F32 -n WIN_INSTALL /dev/sdb3
+sudo mkfs.vfat -F32 -n EFI /dev/sdX1
+sudo mkfs.ext4 /dev/sdX2
+sudo mkfs.vfat -F32 -n WIN_INSTALL /dev/sdX3
 ```
 
 ----
 
 ##### Montando às unidades - substitua a letra `B` pela letra correspondente do seu pendrive:
 ```
-sudo mount /dev/sdb2 /mnt
+sudo mount /dev/sdX2 /mnt
 sudo mkdir -p /mnt/boot/EFI
 sudo mkdir -p /mnt/WIN_INSTALL
 sudo mkdir -p /mnt/ISOs
-sudo mount /dev/sdb1 /mnt/boot/EFI
-sudo mount /dev/sdb3 /mnt/WIN_INSTALL
+sudo mount /dev/sdX1 /mnt/boot/EFI
+sudo mount /dev/sdX3 /mnt/WIN_INSTALL
 sudo chown -R "$USER":users /mnt/
 ```
 
@@ -157,7 +157,7 @@ menuentry "Android (BlissOS-v11.13)" --hotkey=1 --class android-x86 {
 ```
 sudo arch-chroot /mnt
 
-grub-install --target=i386-pc --recheck /dev/sdb   #Este comando é para instalar o GRUB na MBR
+grub-install --target=i386-pc --recheck /dev/sdX   #Este comando é para instalar o GRUB na MBR
 
 grub-install --verbose --recheck --force --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=MULTIBOOT --removable
 
